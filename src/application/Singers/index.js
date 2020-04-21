@@ -23,6 +23,7 @@ import Scroll from './../../baseUI/scroll/index';
 import {connect} from 'react-redux';
 import Loading from '../../baseUI/loading';
 import { CHANGE_CATEGORY, CHANGE_ALPHA, Data } from './data';
+import { renderRoutes } from 'react-router-config';
 function Singers(props) {
 
   const { singerList, enterLoading, pullUpLoading, pullDownLoading, pageCount } = props;
@@ -32,6 +33,10 @@ function Singers(props) {
   const {data, dispatch} = useContext(CategoryDataContext);
 
   const {category, alpha} = data.toJS();
+
+  const enterDetail = (id)  => {
+    props.history.push (`/singers/${id}`);
+  }
   
   useEffect (() => {
     if (!singerList.size) {
@@ -65,7 +70,7 @@ function Singers(props) {
         {
           list.map((item, index) => {
             return (
-              <ListItem key={item.accountId+""+index}>
+              <ListItem key={item.accountId+""+index} onClick={() => enterDetail(item.id)}>
                 <div className="img_wrapper">
                   <LazyLoad placeholder={<img width="100%" height="100%" src={require('./singer.png')} alt="music"/>}>
                     <img src={`${item.picUrl}?param=300x300`} width="100%" height="100%" alt="music"/>
@@ -98,6 +103,7 @@ function Singers(props) {
         </Scroll>
         <Loading show={enterLoading}></Loading>
       </ListContainer>
+      { renderRoutes (props.route.routes) }
     </div>
   )
 }
